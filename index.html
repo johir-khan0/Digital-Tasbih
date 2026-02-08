@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: https://cdn.tailwindcss.com https://esm.sh; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' blob: data: https://esm.sh https://fonts.googleapis.com https://fonts.gstatic.com https://cdn.tailwindcss.com;">
+    <title>Digital Tasbih Counter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    screens: {
+                        'watch': {'max': '280px'},
+                        'xs': '360px',
+                        'tall': { 'raw': '(min-height: 650px)' },
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fluid-count: clamp(3.5rem, 25vmin, 9rem);
+            --fluid-button: clamp(7.5rem, 45vmin, 18rem);
+            --fluid-card-padding: clamp(1rem, 5vmin, 3rem);
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+        }
+
+        .dark body {
+            background-color: #020617;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+            user-select: none;
+        }
+
+        .font-numbers {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .arabic-script {
+            font-family: 'Amiri', serif;
+            line-height: 1.8;
+        }
+
+        @keyframes progress-ring {
+            from { stroke-dashoffset: 283; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes tap-inner {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.92); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes success-glow {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .animate-success-pulse {
+            animation: success-glow 2s infinite;
+        }
+
+        .tap-active {
+            animation: tap-inner 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.3s ease-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        @keyframes voice-listening-pulse {
+            0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.6); }
+            100% { box-shadow: 0 0 0 35px rgba(16, 185, 129, 0); }
+        }
+        .voice-listening-active {
+            animation: voice-listening-pulse 1.5s cubic-bezier(0.25, 0, 0.2, 1) infinite;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .min-h-screen-ios {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        .text-fluid-count { font-size: var(--fluid-count); }
+        .size-fluid-button { width: var(--fluid-button); height: var(--fluid-button); }
+        .p-fluid-card { padding: var(--fluid-card-padding); }
+        
+        @media (max-width: 280px) {
+            :root {
+                --fluid-count: 3.5rem;
+                --fluid-button: 8rem;
+                --fluid-card-padding: 0.5rem;
+            }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom": "https://esm.sh/react-dom@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 transition-colors duration-300">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
